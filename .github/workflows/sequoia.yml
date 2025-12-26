@@ -1,0 +1,22 @@
+name: Build macOS Sequoia Installer
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Download macOS Sequoia Installer
+        run: |
+          softwareupdate --fetch-full-installer --full-installer-version 15.0
+
+      - name: Zip Installer
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent "/Applications/Install macOS Sequoia.app" sequoia.zip
+
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Install-macOS-Sequoia
+          path: sequoia.zip
